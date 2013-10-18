@@ -1,0 +1,16 @@
+echo 'fast test WITH xdebug : 1'
+echo 'fast test NO xdebug : 2';
+echo 'test : 3';
+read -p 'choose config to run with  : (int)' action
+
+if [ "$action" = "3" ]; then
+    handleSection 'testsuite' 'fast-test';
+fi
+
+if [ "$action" = "2" ]; then
+    handleSection 'testsuite' 'fast-test-nx';
+fi
+
+if [ "$action" = "1" ]; then
+    handleSection 'testsuite' 'test';
+fi

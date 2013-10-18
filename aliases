@@ -1,0 +1,58 @@
+addAliases()
+{
+projectCommandsPath="$1";
+
+
+
+alias show-config='xs-c';
+
+alias projectCommandsPath=$projectCommandsPath;
+
+
+alias xe-p="export-path";
+
+xsc="xs-c $projectCommandsPath";
+xscr="$xsc/show-config.sh";
+alias xs-c="$xscr";
+
+alias open-db-backup="cd $dbBackupDir; gitg;";
+
+alias open-config="nano $baseConfigFile";
+
+alias xw-c="write-config.sh";
+
+alias t="xf-t";
+
+alias xf-t="/usr/bin/project-commands/fast-test.sh";
+
+alias xf-t-n="/usr/bin/project-commands/fast-test-nx.sh";
+
+alias xtn="xf-t-n";
+
+alias xt="/usr/bin/project-commands/test.sh";
+
+alias xd-a="/usr/bin/project-commands/dev-apigen.sh";
+
+alias xp-a="/usr/bin/project-commands/pub-apigen.sh";
+
+alias xm-d-a="/usr/bin/project-commands/make-dev-apigen.sh";
+
+alias xm-p-a="/usr/bin/project-commands/make-pub-apigen.sh";
+
+alias xf-r="/usr/bin/project-commands/file-report.sh";
+
+alias xp-f-r="bash /usr/bin/project-commands/prompt-file-report.sh";
+
+alias xb-u="bash /usr/bin/project-commands/back-up.sh";
+
+alias xd-c="bash /usr/bin/project-commands/db-commit.sh";
+
+alias xg-c="xd-c; cd $gitDir; git-cola";
+
+alias x="php /var/www/tests/folder/exp.php";
+
+
+
+alias xb-u-x="/usr/bin/project-commands/back-up-xml.sh";
+
+}

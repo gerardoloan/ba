@@ -1,0 +1,17 @@
+loop=true;
+echo 'type quit to go back'
+while [ "$loop" == "true" ] 
+    do
+        read -p 'command > ' commandd
+        
+        if [ "$commandd" == "quit" ]; then
+              unset loop;
+        fi
+        
+        if [ $loop ]; then
+             eval $commandd; 
+             echo '';
+        fi
+       
+
+    done

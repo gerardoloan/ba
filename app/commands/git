@@ -1,0 +1,4 @@
+initSection 'gitcommands';
+read -p 'git > ' commandd
+
+handleSection 'gitcommands' $commandd

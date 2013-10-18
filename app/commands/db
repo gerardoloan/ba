@@ -1,0 +1,3 @@
+initSection 'database';
+read -p 'd-b > ' commandd
+handleSection 'database' $commandd

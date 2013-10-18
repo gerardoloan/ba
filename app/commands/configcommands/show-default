@@ -1,0 +1,18 @@
+echo 'config[baseConfigFile] = '$config[baseConfigFile];
+
+echo 'config[quickReportFile] = '$config[quickReportFile];
+
+echo 'config[quickViewDir] = '$config[quickViewDir];
+
+echo 'config[pageDocReportFile] = '$config[pageDocReportFile]
+
+echo 'config[gitDir] = '${config[gitDir]}
+
+echo 'config[apigenDir] = '${config[apigenDir]}
+
+echo 'config[testDir] = '${config[testDir]}
+
+echo 'config[db] = '${config[db]}
+echo 'config[dbUser] = '${config[dbUser]}
+echo 'config[dbPassword] = '${config[dbPassword]}
+echo 'config[dbBackupDir] = '${config[dbBackupDir]}

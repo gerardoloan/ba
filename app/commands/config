@@ -1,0 +1,16 @@
+echo 'show current : 1'
+echo 'set session var : 2';
+echo 'open config : 3';
+read -p 'choose session action : (int)' action
+
+if [ "$action" = "3" ]; then
+    nano ${config[baseConfigFile]};
+fi
+
+if [ "$action" = "2" ]; then
+    handleSection 'configcommands' 'write-var';
+fi
+
+if [ "$action" = "1" ]; then
+    handleSection 'configcommands' 'show-default';
+fi

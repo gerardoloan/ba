@@ -1,0 +1,4 @@
+initSection 'documentation';
+read -p 'd-b > ' commandd
+handleSection 'documentation' $commandd
+
