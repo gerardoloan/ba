@@ -2,31 +2,54 @@
 
 verbose()
 {
-
+   
     local message;
     local verbosity;
     local sysVerbosity;
-    message="$1";
-    verbosity="$2";
-    sysVerbosity="$3";
-  
-    if [  $verbosity ]; then
-       echo $message;
-      
-       return;
-    fi
     
-    if [[ "$verbosity" < "$sysVerbosity" ]]; then
+    message="$1";   
+    verbosity="$2";
+    sysVerbosity=$config[sysVerbosity];  
+  
+    #passed with one param only echo
+    if [  "$verbosity" = "" ]; then 
         echo $message;
         
+        return;
+    fi
+    #base system verbosity level
+    if [  "$verbosity" = 1 ]; then
+       colorMessage "$message";
+       
+       return;
+    fi
+    #message has +int verbosity not 1 
+    #is less than system return null
+    if [[ "$verbosity" < "$sysVerbosity" ]]; then
+       
         return;
     fi
 
-   if [[ "$verbosity" == "$sysVerbosity" ]]; then
+    colorMessage $message;
+
+    return;
+}
+colorMessage()
+{
+
+    local message;
+    message="$1";
+    local r=${config[nocolors]};
+
+    if [  "$r" = "1" ]; then 
         echo $message;
         
         return;
-    fi  
+    fi
+   
+    echo -en '\E[37;44m'"\033[1m"$message"\n\033[0m";
+    
+    return
 }
 printConfigValidation()
 {
@@ -83,10 +106,10 @@ protected()
 }
 echoInitConfig()
 {
-printConfigValidation 'valiadating config ...'1 $verbosity;
+    printConfigValidation 'valiadating config ...'1 $verbosity;
 
-printConfigValidation 'this process warns and only sometimes exits :) ';
-printConfigValidation 'read the output...';
+    printConfigValidation 'this process warns and only sometimes exits :) ';
+    printConfigValidation 'read the output...';
 }
 configValidation()
 {
@@ -146,10 +169,52 @@ changeDbBackupFormat()
 {
 
     format="sql";
-    read -p 'sql || xml - 1 | 2 : ' changeFromSql
+    read -p 'sql || xml - 1 | 2 : ' changeFromSql;
 
     if [ "$changeFromSql" = "2" ]; then
 
         format="xml";
     fi
+}
+warnIfUserIsRoot()
+{
+    if [ "$USER" = "root" ]; then 
+         warn 'seems you are ROOT';
+    
+         read -p 'EXIT 0 : 1 > ' bailOut;
+         if [ "$bailOut" = "1" ]; then 
+              warn 'exiting ...';
+              exit;
+         fi
+    fi
+}
+warn()
+{
+    local message;
+    message="$1";
+    verbose $message 1;
+}
+createDirStatusRecord()
+{
+    cd ${config[trackDir]};
+    mv .dirstatusrecord.txt .olddirstatusrecord.txt;
+    ls -lRF >> .dirstatusrecord.txt;
+}
+compareDirStatusRecordsEqual()
+{
+    prepareDirectory;
+    oldCheckSum=$( cksum .olddirstatusrecord.txt );
+    newCheckSum=$( cksum .dirstatusrecord.txt );
+    
+    if [ "$oldCheckSum"="$newCheckSum" ]; then
+        
+        return 1;
+    fi;
+
+    return 0;
+}
+prepareDirectory()
+{
+    touch .olddirstatusrecord.txt;
+    touch .dirstatusrecord.txt;
 }

@@ -1,18 +1,26 @@
-echo 'config[baseConfigFile] = '$config[baseConfigFile];
+let "instances = ${#config[*]} - 1"
+verbose 'count : '$instances;
 
-echo 'config[quickReportFile] = '$config[quickReportFile];
+declare -a configKeys 
+count=0;
+for entry in  ${!config[*]}
+    do
+        
+        configKeys["$count"]=$entry;
+        let "count++";
 
-echo 'config[quickViewDir] = '$config[quickViewDir];
+    done
+count=0;
+for entry in  ${config[*]}
+    do
 
-echo 'config[pageDocReportFile] = '$config[pageDocReportFile]
+        label=${configKeys["$count"]};
+       
+        verbose  $label' : '$entry;
+        let "count++";
 
-echo 'config[gitDir] = '${config[gitDir]}
+    done
 
-echo 'config[apigenDir] = '${config[apigenDir]}
 
-echo 'config[testDir] = '${config[testDir]}
 
-echo 'config[db] = '${config[db]}
-echo 'config[dbUser] = '${config[dbUser]}
-echo 'config[dbPassword] = '${config[dbPassword]}
-echo 'config[dbBackupDir] = '${config[dbBackupDir]}
+

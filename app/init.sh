@@ -1,13 +1,25 @@
+
+
+. $projectCommandsPath/functions/functions.sh
+equality=$(compareDirStatusRecordsEqual);
+echo $equality;
+#exit
+########################################################33
+
 . /usr/bin/project-commands/config/config.sh
 
 ######################################################################
 
-. $projectCommandsPath/functions/functions.sh
+warnIfUserIsRoot;
 
+#####################################################
 
+#. /usr/share/nano/sh.nanorc
+
+#verbose 'test';
 
 ########################
-#bechoInitConfig;
+echoInitConfig;
 
 #################################################
 
