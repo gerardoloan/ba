@@ -1,0 +1,109 @@
+.:
+total 36
+-rwxrwxrwx 1 root   root    170 Oct 18 02:39 -*
+-rwxrwxrwx 1 gerard gerard 1175 Oct 18 17:19 aliases*
+drwxrwxrwx 4 gerard gerard 4096 Oct 18 21:20 app/
+drwxrwxrwx 2 gerard gerard 4096 Oct 18 14:27 config/
+drwxrwxrwx 2 gerard gerard 4096 Oct 17 19:48 config-validation/
+-rwxrwxrwx 1 gerard gerard    0 Oct 18 16:58 create-variables.sh*
+drwxrwxrwx 2 gerard gerard 4096 Oct 18 01:15 functions/
+-rw------- 1 gerard gerard    2 Oct 19 20:45 nano.save
+drwxrwxrwx 3 gerard gerard 4096 Oct 17 01:10 nbproject/
+-rwxrwxrwx 1 gerard gerard    0 Oct 17 02:08 open-config*
+drwxrwxrwx 2 gerard gerard 4096 Oct 18 13:00 quick/
+-rwxrwxrwx 1 gerard gerard    0 Oct 17 02:49 show-config*
+-rwxrwxrwx 1 gerard gerard    0 Oct 17 02:09 write-config*
+-rwxrwxrwx 1 gerard gerard    0 Oct 17 05:21 x*
+
+./app:
+total 12
+drwxrwxrwx 7 gerard gerard 4096 Oct 19 21:22 commands/
+-rwxrwxrwx 1 gerard gerard    0 Oct 18 17:06 create-variables.sh*
+-rwxrwxrwx 1 gerard gerard 1959 Oct 19 21:50 init.sh*
+drwxrwxrwx 2 gerard gerard 4096 Oct 18 21:20 variables/
+
+./app/commands:
+total 56
+-rwxrwxrwx 1 gerard gerard   14 Oct 18 18:17 browser*
+-rwxrwxrwx 1 gerard gerard  335 Oct 19 01:56 command*
+-rwxrwxrwx 1 gerard gerard  655 Oct 19 21:20 config*
+drwxrwxrwx 2 gerard gerard 4096 Oct 18 22:00 configcommands/
+drwxrwxrwx 2 gerard gerard 4096 Oct 18 18:48 database/
+-rwxrwxrwx 1 gerard gerard   84 Oct 18 18:36 db*
+-rwxrwxrwx 1 gerard gerard   96 Oct 18 20:57 doc*
+drwxrwxrwx 2 gerard gerard 4096 Oct 18 18:03 documentation/
+-rwxrwxrwx 1 gerard gerard  109 Oct 19 12:38 git*
+drwxrwxrwx 2 gerard gerard 4096 Oct 18 19:53 gitcommands/
+-rwxrwxrwx 1 root   root    151 Oct 18 05:58 prompt-quick-report*
+-rwxrwxrwx 1 root   root    120 Oct 18 20:07 quick-report*
+-rwxrwxrwx 1 gerard gerard  359 Oct 18 22:45 test*
+drwxrwxrwx 2 gerard gerard 4096 Oct 18 17:59 testsuite/
+
+./app/commands/configcommands:
+total 12
+-rwxrwxrwx 1 gerard gerard  34 Oct 18 22:00 open-config*
+-rwxrwxrwx 1 gerard gerard 377 Oct 19 17:16 show-default*
+-rwxrwxrwx 1 gerard gerard 210 Oct 19 21:09 write-var*
+
+./app/commands/database:
+total 20
+-rwxrwxrwx 1 gerard gerard 278 Oct 18 18:55 back-up-sql*
+-rwxrwxrwx 1 gerard gerard 278 Oct 18 15:45 back-up-xml*
+-rwxrwxrwx 1 root   root   403 Oct 18 19:20 db-commit*
+-rwxrwxrwx 1 gerard gerard   0 Oct 17 02:09 open-db-backup*
+-rwxrwxrwx 1 gerard gerard 609 Oct 18 19:49 prompt-back-up*
+-rwxrwxrwx 1 gerard gerard 605 Oct 18 18:50 prompt-back-up-xml*
+
+./app/commands/documentation:
+total 24
+-rwxrwxrwx 1 root root 358 Oct 18 16:09 make-dev-apigen*
+-rwxrwxrwx 1 root root 312 Oct 18 16:08 make-pub-apigen*
+-rwxrwxrwx 1 root root 171 Oct  4 21:45 prompt-dev-apigen*
+-rwxrwxrwx 1 root root 430 Oct 18 19:42 prompt-pub-apigen*
+-rwxrwxrwx 1 root root 140 Oct 18 19:23 quick-apigen*
+-rwxrwxrwx 1 root root  83 Oct 18 19:22 quick-view*
+
+./app/commands/gitcommands:
+total 4
+-rwxrwxrwx 1 gerard gerard 283 Oct 18 20:03 tools*
+
+./app/commands/testsuite:
+total 12
+-rwxrwxrwx 1 root   root   139 Oct 18 16:10 fast-test*
+-rwxrwxrwx 1 gerard gerard  90 Oct 18 16:10 fast-test-nx*
+-rwxrwxrwx 1 root   root   100 Oct 18 22:40 test*
+
+./app/variables:
+total 0
+
+./config:
+total 4
+-rwxrwxrwx 1 gerard gerard 820 Oct 19 21:49 config.sh*
+
+./config-validation:
+total 24
+-rwxrwxrwx 1 gerard gerard 564 Oct 18 17:16 apigen-dir.sh*
+-rwxrwxrwx 1 gerard gerard 920 Oct 18 15:59 db.sh*
+-rwxrwxrwx 1 gerard gerard 392 Oct 18 15:41 git-dir.sh*
+-rwxrwxrwx 1 gerard gerard 443 Oct 18 15:38 quick-report-file.sh*
+-rwxrwxrwx 1 gerard gerard 345 Oct 18 15:39 quick-view-dir.sh*
+-rwxrwxrwx 1 gerard gerard 373 Oct 18 15:40 test-dir.sh*
+
+./functions:
+total 8
+-rwxrwxrwx 1 gerard gerard 4203 Oct 19 22:50 functions.sh*
+
+./nbproject:
+total 12
+drwxrwxrwx 2 gerard gerard 4096 Oct 17 02:03 private/
+-rwxrwxrwx 1 gerard gerard  133 Oct 17 01:10 project.properties*
+-rwxrwxrwx 1 gerard gerard  313 Oct 17 01:10 project.xml*
+
+./nbproject/private:
+total 8
+-rwxrwxrwx 1 gerard gerard   0 Oct 17 01:11 phpcsmd.xml*
+-rwxrwxrwx 1 gerard gerard 154 Oct 17 01:10 private.properties*
+-rwxrwxrwx 1 gerard gerard 226 Oct 18 17:55 private.xml*
+
+./quick:
+total 0

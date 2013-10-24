@@ -1,0 +1,5 @@
+
+fixCommandHistory 
+echoDirList;
+holdForSubMenu=1;
+initSubSection 'configcommands';

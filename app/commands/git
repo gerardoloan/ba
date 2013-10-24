@@ -1,5 +1,1 @@
-initSection 'gitcommands';
-warnIfUserIsRoot;
-read -p 'git > ' commandd
-
-handleSection 'gitcommands' $commandd
+initSubSection 'gitcommands';

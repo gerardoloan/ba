@@ -1,5 +1,4 @@
 loop=true;
-. $projectCommandsPath/aliases;
 verbose 'type quit to go back' 0 $verbosity
 while [ "$loop" == "true" ] 
     do

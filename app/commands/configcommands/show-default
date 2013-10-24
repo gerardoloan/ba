@@ -7,7 +7,7 @@ for entry in  ${!config[*]}
     do
         
         configKeys["$count"]=$entry;
-        let "count++";
+        ((count++));
 
     done
 count=0;
@@ -17,7 +17,7 @@ for entry in  ${config[*]}
         label=${configKeys["$count"]};
        
         verbose  $label' : '$entry;
-        let "count++";
+        ((count++));
 
     done
 
