@@ -1,6 +1,6 @@
 apigenDir=${config[apigenDir]};
 
-echo "current: $apigenDir";
+verbose "current: $apigenDir";
 read -p 'change apigen dir? ' cad
 
 if [ $cad ]; then
@@ -8,7 +8,7 @@ if [ $cad ]; then
 fi
 
 apigenCf='dev_doc.neon';
-echo echo "current: $apigenCf";
+verbose  "current: $apigenCf";
 read -p 'change apigen config file? ' cacf
 
 if [ $cacf ]; then

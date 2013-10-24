@@ -25,6 +25,6 @@ if [ $changeDbDir ]; then
     read -p '$dbBackupDir = ' dbBackupDir ;
 fi 
 
-. /usr/bin/project-commands/app/commands/database/back-up
+. /usr/bin/project-commands/app/commands/database/back-up-sql;
 
 

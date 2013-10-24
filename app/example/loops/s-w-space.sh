@@ -1,0 +1,13 @@
+generate_list ()
+{
+    echo "one two three"
+}
+echo 'Let "word" grab output of function';
+
+for word in $(generate_list)
+   do
+       echo "$word"
+    done
+
+echo '1, 2, 3';
+

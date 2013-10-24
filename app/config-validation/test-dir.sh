@@ -12,5 +12,4 @@ if [ ! -f $testDir/fastphpunit.xml ]; then
     error "file $testDir/fastphpunit.xml not found" 1
 fi
 
-printConfigValidation '$testDir set : '.$testDir 1 $verbosity;
-
+verbose "testDir set : $testDir" 2;

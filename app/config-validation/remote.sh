@@ -1,30 +1,21 @@
 # validate $remoteDbBackupDir dir write
-r=${config[remoteDbDir]};
 
-db=${config[db]};
-proPath=${config[baseProjectPath]};
-fp=$proPath$r/$db;  
-
-if [ ! -d "$fp" ];then
-    error $fp' not dir';    
-fi
+remoteDbBackupDirSP=${config[baseProjectPath]};
 
 #vailadte we have short path
-if [ ! $r ];then
-   error '***ERROR*** remote db back up not declared'$r;
+if [ ! $remoteDbBackupDirSP ];then
+   error '***ERROR*** remote db back up not declared';
 fi
 
 #create full path
-b=${config[baseProjectPath]};
-# $r remote path
-dir=$b$r;
+baseProjectPath=${config[baseProjectPath]};
+dir=$baseProjectPath$remoteDbBackupDirSP;
 
-#validate  write and dir 
+#validate 
 if [ ! -d $dir ];then
-   error '***ERROR*** -d remoteDbBackupDir '.$dir;
+     error "***ERROR*** -d remoteDbBackupDir $remoteDbBackupDir";
 fi
-
+echo $remoteDbBackupDir;
 if [ ! -w $dir ];then
-   error '***ERROR*** -w $remoteDbBackupDir '.$dir;
+   error '***ERROR*** -w $remoteDbBackupDir '.$remoteDbBackupDir;
 fi
-

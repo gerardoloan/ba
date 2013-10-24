@@ -21,25 +21,21 @@ fi
 if [ ! -w $dbBackupDir ];then
    error '***ERROR*** $dbBackupDir not writeable'.$dbBackupDir;
 fi
+g=$( isGitDir $dbBackupDir ); 
+if [[ "$g">"0" ]]; then
+   error "***ERROR***  dbBackupDir:  $dbBackupDir is not  a git returned $?";   
+fi
 
+verbose 'db config exists' 2;
+verbose 'testing connection ...' 2;
 
-
-
-printConfigValidation 'db config exists'
-printConfigValidation 'testing connection ...'
-handleVerboseDb()
-{
-    if [[ $verbose > 1 ]]; then
-        mysqlshowResult= mysqlshow --version -u $dbUser -p$dbPassword $db;
-        
+    e=$(mysqlshow --version -u $dbUser -p$dbPassword $db);
+    if [[ "$?" > 0 ]]; then
+        error '***ERROR*** mysqlshow not responding properly';
         return;
-    fi
+    fi  
     
-    mysqlshow --version -u $dbUser -p$dbPassword $db;
-
     return
 
-}
-handleVerboseDb
 
-printConfigValidation 'connection tried';
+verbose 'connection tried' 2;

@@ -1,12 +1,12 @@
 #assert $quickViewDir dir read
-quickViewDir=${config[quickViewDir]};
+qDir=${config[quickViewDir]};
 
-if [ ! -d $quickViewDir ]; then
-    error "***ERROR*** dir: $quickViewDir is not valid dir";
+if [ ! -d $qDir ]; then
+    error "***ERROR*** dir: $qDir is not valid dir";
 
 fi
-if [ ! -r $quickViewDir ]; then
-    error "***ERROR*** dir: $quickViewDir is not writable valid dir";
+if [ ! -r $qDir ]; then
+    error "***ERROR*** dir: $qDir is not writable valid dir";
 fi
 
-printConfigValidation  '$quickViewDir set : '$quickViewDir 1 $verbosity;
+verbose  '$quickViewDir set : '$qDir 2;

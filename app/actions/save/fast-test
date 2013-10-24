@@ -1,1 +1,1 @@
-. /usr/bin/project-commands/app/commands/testsuite/fast-test
+. $commandPath/testsuite/fast-test

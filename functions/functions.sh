@@ -1,45 +1,79 @@
 #!/bin/bash
+
+# space tool - for astronots,
+# children and philosophers
+
+isGitDir()
+{
+    if [ ! -d "$1" ]; then
+        echo 1;
+    fi;
+    cd $1;
+    stat=$(git status);
+    if [[ "$?">"0" ]]; then
+        echo 1;
+    fi
+}
+changeDbBackupFormat()
+{
+
+    format="sql";
+    read -p 'sql || xml - 1 || 2 : ' changeFromSql;
+
+    if [ "$changeFromSql" = "2" ]; then
+        format="xml";
+    fi
+}
+
 doGeneralCheck()
 {
-    warnIfUserIsRoot;
+    doWelcome;
     warnBuild;
     validateConfig;
 }
+
 verbose()
-{
-   
-    local message;
+{   
+    local m;
     local verbosity;
     local sysVerbosity;
     
-    message="$1";   
-    verbosity="$2";
-    sysVerbosity=$config[sysVerbosity];  
-   
-    #passed with one param only 
-
-    if [  "$verbosity" = "" ]; then 
-        echo $message;
+    m="$1";   
+    v="$2";
+    sV=${config[sysVerbosity]};  
+       
+    if [[ ! "$v"  =~ [[:digit:]] ]]; then
+        #colorMessage 'easy digit mathcing here ' 6; 
+        echo $m;
         
         return;
     fi
+
+    if [[ ! "$sV"  =~ [[:digit:]] ]]; then
+        #colorMessage 'cant let a none digit fall through here' 6; 
+        sV=1;
+    fi
+    
     #base system verbosity level
-    if [  "$verbosity" = 1 ]; then
-       colorMessage "$message";
+    if [ "$v" = 1 ]; then
+       colorMessage "$m";
        
        return;
     fi
+
     #message has +int verbosity not 1 
     #is less than system return null
-    if [[ "$verbosity" > "$sysVerbosity" ]]; then
-       
+    if [ "$v" -gt "$sV" ]; then
+        #colorMessage 'only one bracket here if [ "$v" -gt "$sV" ] ?';
+        
         return;
     fi
 
-    colorMessage "$message";
+    colorMessage "$m" $v;
 
     return;
 }
+
 colorMessage()
 {
     #message $1
@@ -55,6 +89,7 @@ colorMessage()
     
     return
 }
+
 doColorMessage()
 {
     return;
@@ -70,7 +105,6 @@ printConfigValidation()
     if [ $newProcess ]; then
         verbose $message $verbosity;
     fi
-
 }
 
 error()
@@ -78,44 +112,20 @@ error()
     echo $1;
     exit;
 }
-public()
+depError()
 {
-    local projectCommandsPath;
-    projectCommandsPath="$1";
-    
-    local  commandd;
-    commandd="$2";
-
-    matched=0;
-    protected $projectCommandsPath $commandd
-    if [ "$commandd" == "quit" ]; then
-              exit;
-    fi
-    publicCommandsPath=$projectCommandsPath/app/commands;
-echo $publicCommandsPath/$commandd; 
-    . $publicCommandsPath/$commandd;
-
+    echo "dependency error in $2 package";
+    error "$1";
 }
-protected()
-{
-    local projectCommandsPath;
-    projectCommandsPath="$1";
-    
-    local  commandd;
-    commandd="$2";
-    
-    matched=0;
-    case "$command" in
-        "ba") echo 'in protected()'; exit
-    esac
-}
+
 echoInitConfig()
 {
-    printConfigValidation 'valiadating config ...'1 $verbosity;
+    verbose 'valiadating config ...' 3;
 
-    printConfigValidation 'this process warns and only sometimes exits :) ';
-    printConfigValidation 'read the output...';
+    verbose 'this process warns and only sometimes exits :) ' 3;
+    verbose 'read the output...' 3;
 }
+
 configValidation()
 {
     local projectCommandsPath;
@@ -134,11 +144,7 @@ configValidation()
         fi
         
     done
-
 }
-
-
-
 initSection()
 {
 
@@ -148,89 +154,38 @@ initSection()
    
 }
 
-handleSection()
+doWelcome()
 {   
-
-    local section;
-    section="$1";
-    local action;
-    action="$2";
-    helpAction="$3";
-    if [ "$action"="help" ]; then
-        handleSectionHelp $section $action $helpAction;
-    fi
-    exit;
-    . $projectCommandsPath/app/commands/$section/$action;
-}
-handleSectionHelp()
-{
-    local section;
-    section="$1";
-    local action;
-    action="$2";
-    . $projectCommandsPath/app/help/$section/$action;
-}
-changeDbBackupFormat()
-{
-
-    format="sql";
-    read -p 'sql || xml - 1 | 2 : ' changeFromSql;
-
-    if [ "$changeFromSql" = "2" ]; then
-        format="xml";
-    fi
-}
-warnIfUserIsRoot()
-{
-    if [ "$USER" = "root" ]; then 
-         warn 'seems you are ROOT';
+    welcome()
+    {
+        verbose 'welcome '$1 1;
+    }
+    warn()
+    {
+        if [ "$1" = "root" ]; then 
+            verbose 'seems you are ROOT' 1;
     
-         read -p 'EXIT 0 : 1 > ' bailOut;
-         if [ "$bailOut" = "1" ]; then 
-              warn 'exiting ...';
-              exit;
-         fi
-    fi
+            read -p 'EXIT 0 : 1 > ' bailOut;
+            if [ "$bailOut" = "1" ]; then 
+                verbose 'exiting ...';
+                exit;
+            fi
+        fi
+    }
+
+    local user=$(whoami);
+    
+    welcome "$user";
+    warn "$user";
 }
+
 warn()
 {
-    local message;
-    message="$1";
-    verbose $message 1;
+    echo "$1" 1;
 }
 
-compareDirStatusRecordsEqual()
-{
-    path=${config[trackDir]};
-    
-    newCheckSum=$(  ls -lRF $path ); 
-    nCS=$( echo -n "$newCheckSum" | md5sum );
-   
-    verbose 'old '$priCS 3;
-    verbose 'nw '$nCS 3;
-    if [ "$priCS" = "$nCS" ]; then
-        echo workMore;
-        
-        return;
-    fi;
-    #@todo make this a feature
-    priCS=$nCS;
-    export priCS=$priCS    
-    echo $priCS;
-    actionHandlers 'save';
-    return 0;
-}
 
-actionHandlers()
-{
-    
-    for file in $projectCommandsPath/app/actions/$1/*; do 
-        if [ -e "$file" ] ; then
-            # Make sure it isn't an empty match.
-          . "$file";
-        fi
-    done
-}
+
 validateConfig()
 {    
     for file in $projectCommandsPath/app/config-validation/*; do 
@@ -260,8 +215,8 @@ warnBuild()
     if [[ "$count" > "1" ]]; then
         error 'to many files in '$projectCommandsPath'/app/dangerous';
     fi;
-
 }
+
 exitOnError()
 {
     #error status must not be greater than 0;
@@ -271,6 +226,22 @@ exitOnError()
         exit;
     fi
 }
+##############################################
+# start the tasks
+
+#startBGProc()
+#{
+#    sTO=${config[saveTimeOut]};
+ #   while true do
+ #       sleep $sTO;
+   #    compareDirStatusRecordsEqual;
+  # done
+#}
+checkProcesses()
+{
+    return;
+}
+
 #internal 
 # lastCommanddIndex
 # loop
@@ -290,43 +261,193 @@ exitOnError()
 
 launcher()
 {   
+    
     export iWant=1;
     # command History;
     cHIndex=0;
     loop=true;
     echo 'type quit to go back'
-    while [ "$loop" == "true" ] 
+    while [ "$loop"=true ] 
         do
-            read -p 'b-a > ' commandd
+            verbose "dropping into while loop $loop" 3;
+            #echo 'explore and care';
+            read -p 'space tool > ' commandd num
             echo 'command is '$commandd;
-            
-            doBack;
-            
-            nextStart;
-
-            intToStringCommandd;           
-
-            verbose 'current index '$cHIndex 3;
-
-            prepareForward $commandd;
-
-            prepareCommandPath;          
-            
-            if [ "$commandd" = "help" ]; then  
-                prepareBack 1;  
-                echoDirList;
-          #  echo 'try something : ';
-            else
+            if [ "$commandd" ]; then
                 
-                 . $fullCP ; 
-                processHoldForSubMenu;
-            fi         
-            
+                verbose 'makeSecure' 3;
+                
+                makeSecure; 
+
+                verbose 'needless func prepareCommandVars' 4;
+               
+                doBack;           
+
+                nextStart;
+
+                intToStringCommandd;           
+
+                verbose 'current index '$cHIndex 3;
+                verbose "prepareForward $commandd";
+
+                prepareForward $commandd;
+
+                prepareCommandPath;                   
+
+                launchAction;                     
+            fi;
             #by default restart app so config is refreshed.
             export cHIndex=$cHIndex;
-        
+            verbose "falling out of while $loop" 3
         done
 }
+
+launchAction()
+{
+    restrictedDefaultAction()
+    {
+        if [ -f $fullCP ]; then
+            verbose 'safely dispatched file in a restricted action' 3;
+            . $fullCP ; 
+            return;
+        fi;
+        verbose 'default action seemed not to be a valid file and was not dispatched' 3;
+    }
+    launchDefault()
+    {   
+        verbose "nobodies got it. $1. launching default $fullCP" 3;
+        
+        restrictedDefaultAction;
+        
+        processHoldForSubMenu;
+ 
+        verbose 'hope someone claimed it '$1 3;
+    }
+    verbose 'seems you cant call claimItAndDoIt from here Success. commandd will not be found' 6;
+    verbose 'yet the first line the first declared claimItAndDoIt will execute' 5;
+    
+    h=0;
+    
+    launchHelpers; 
+    
+    verbose "helpers returned $h";
+    if [ ! "$h" -gt 0 ]; then
+        launchDefault $h; 
+    fi;            
+}
+launchHelpers()
+{
+    launchHelp()
+    {
+        echoDirList()
+        {
+            prepareCommandPath; 
+            cd $fullCP;
+            verbose 'echoing directory list '$fullCP;
+            count=0;
+            for file in ./*; do
+                if [ -f "$file" ]; then 
+                echo $file' '$count;
+                ((count++));   
+                fi;
+            done;
+        }
+        claimItAndDoIt()
+        {
+            if [ "$commandd" = "help" ]; then  
+               prepareBack 1;  
+               echoDirList;
+               verbose "help claimed $commandd" 3;  
+               claimed=1;
+            fi; 
+            if [ "$commandd" = "h" ]; then  
+                prepareBack 1;  
+                echoDirList;
+                verbose "h claimed $commandd" 3;
+                claimed=1;
+            fi; 
+        }
+        claimItAndDoIt;		
+                     
+    }
+    launchMan()
+    {
+        actionMan()
+        {            
+            switchFullPath()
+            {   
+                
+                buildYourCommandd()
+                {                
+                    commandd=$num;
+                
+                    verbose "inserting $commandd" 3;
+                
+                    intToStringCommandd;
+                
+                    verbose "prepareForward $commandd" 3;
+                
+                    prepareForward $commandd;
+                
+                    p="$commandPath/../man";
+
+                    verbose "prepare command path with $p" 3;
+                
+                    prepareCommandPath "$p";
+
+                    aMC=$fullCP.txt
+                
+                    verbose "action man command $aMC" 3;
+                
+                    prepareBack 1;  
+                } 
+                           
+                buildYourCommandd;                            
+            }
+            switchFullPath;
+            if [ -f "$aMC" ]; then
+                echo "the cat is helping you some info from $aMC" 3; 
+                cat $aMC;  
+                
+                return;
+            fi; 
+            
+            verbose 'sorry havent got help, dig into the manual then write it please' 1; 
+            verbose 'put the file in app/man/<same dir structure as commands>.txt'            
+        }
+        claimItAndDoIt()
+        {
+            if [[ ! "$num" &&  "$commandd" = "man" || "$commandd" = "m" ]]; then  
+                prepareBack 1;
+                verbose 'you need to enter the number of the service you want' 1;
+                return;                
+            fi;
+            if [ "$commandd" = "man" ]; then
+                verbose 'use = for strings' 6;  
+                prepareBack 1;  
+                actionMan;
+                verbose 'man claimed and done it' 3;
+                claimed=1;
+            fi; 
+            if [ "$commandd" = "m" ]; then  
+                prepareBack 1;
+                actionMan;
+                verbose 'm claimed and done it' 3;
+                claimed=1;
+            fi;   
+        }
+        claimItAndDoIt;    
+    }
+    claimed=0;
+    
+    launchHelp;
+    launchMan;
+    h=$claimed;
+    verbose "returning int from launch helpers $h" 3;
+}
+
+
+
 nextStart()
 {
     commandIsQuit;
@@ -335,13 +456,21 @@ nextStart()
 }
 doBack()
 {
+    local cIsBack=0;
     if [ "$commandd" = "back" ]; then
-       verbose 'Bck Section' 3;
-
-        prepareBackCommandd;
-        prepareBack 1;                
+        verbose '[$commandd" = "back]' 3;        
+        cIsBack=1;              
     fi
-
+    if [ "$commandd" = "b" ]; then
+        verbose '[$commandd" = "b]' 3;
+        cIsBack=1;             
+    fi
+    if [ "$cIsBack" -eq 1 ]; then
+        verbose '[$commandd" = "b]' 3;
+        cIsBack=1;
+        prepareBackCommandd;
+        prepareBack 2;               
+    fi
 }
 # have to hold once when command is submenu
 # otherwise move back to last commandd position
@@ -352,23 +481,9 @@ processHoldForSubMenu()
         prepareBack 1;
         
         return;
-    fi   
-    
+    fi 
 }
-echoDirList()
-{
-    prepareCommandPath; 
-    cd $fullCP;
-    verbose 'echoing directory list '$fullCP;
-    count=0;
-    for file in ./*; do
-        if [ -f "$file" ]; then 
-        echo $file' '$count;
-        ((count++));   
-        fi;
-    done;
-    
-}
+
 prepareBack()
 {
     local back="$1";
@@ -386,20 +501,22 @@ prepareBack()
     
     ((back--));
     ((cHIndex--))
+    verbose 'what happens if you dont ((cHIndex--)) || in ((back--))' 6;
     prepareBack $back;
 }
 prepareForward()
 {   
-     verbose 'prepare forward index '$cHIndex 3;
+    verbose 'prepare forward index '$cHIndex 3;
     if [[ "$cHIndex" -lt "-1" ]]; then 
         verbose 'regulating $cHIndex from '$cHIndex 3;
-        ((cHIndex++));
-        verbose 'to '$cHIndex; 
+        cHIndex=0;
+        verbose "to $cHIndex"; 
     fi
     ((cHIndex++));
+    #command history
     cH[$cHIndex]=$1;
     
-    verbose ${cH["$cHIndex"]} 3;
+    verbose 'new forward position '${cH["$cHIndex"]} 3;
 }   
 fixCommandHistory()
 {
@@ -411,11 +528,26 @@ fixCommandHistory()
 }
 commandIsQuit()
 {
-    if [ "$commandd" = "quit" ]; then
+    checkCommandIsQuit;
+    if [[ "$q" = "1" ]]; then
+    verbose 'outta here '$q 3;
         unset loop;
         echo 'goodbye...'
         exit 1;
+    fi;
+}
+checkCommandIsQuit()
+{
+    q=0;
+    if [ "$commandd" = "quit" ]; then
+    verbose 'quit claimed' 3;
+        q=1;
     fi
+    if [ "$commandd" = "q" ]; then
+    verbose 'q claimed' 3;
+        q=1;
+    fi
+    return $q;
 }
 showCH()
 {
@@ -430,32 +562,50 @@ showCH()
 }
 prepareCommandPath()
 {
-    verbose 'prepare command path last ';	
+    verbose "normal commandPath is $commandPath" 3;
+    verbose "replacement start path is $1" 3;
+    verbose 'prepare command path last ' 3;
+    setUseCommandPath()
+    {    
+        if [ "$1" ]; then
+            echo $1;
+            return;
+        fi;
+        echo $commandPath;
+    }	
     showCH;
-
+    startPath=$(setUseCommandPath "$1");
     fullCP="";
     for i in ${cH[@]}; do
         if [ $i ]; then 
-            verbose 'building parts '$i;
+            verbose 'building parts '$i 3;
             #path must start with / for concatonation
             fullCP=$fullCP/$i;
         fi
     done
     #fullCP is starting with / already
-    fullCP=$commandPath$fullCP;
-    verbose 'prepare command path '$fullCP;
+    fullCP=$startPath$fullCP;
+    verbose 'prepared command path '$fullCP 3;
 }
+
+
 prepareBackCommandd()
 {
+    regulateBackCommand()
+    {
+        if [ "$1" -gt "0" ]; then         
+            commandd=${cH[$1]};
+            verbose "back has shifted command to $commandd" 3; 
+            return
+        fi;
+        commandd=help; 
+        verbose "back has regulated command  to $commandd" 3; 
+    }
     count=${#cH[*]};
-    lastIndex=$(($count -2));
-    if [[ "$lastIndex" -gt "0" ]]; then 
-        commandd=${cH[$lastIndex]};
-    else 
-        commandd=help;
-    fi;
-    verbose 'prepare back commandd '$commandd 3;
+    lastIndex=$(($count -1));
+    regulateBackCommand "$lastIndex";
 } 
+
 intToStringCommandd()
 {
     if [[ $commandd =~ [[:digit:]] ]]; then
@@ -463,13 +613,14 @@ intToStringCommandd()
         count=0;
         prepareCommandPath;
         cd $fullCP;
+        verbose 'int to string starting loop' 3;
         for file in ./*; do
             if [ -f "$file" ]; then 
-                echo $file' in loop '$count;
+                echo "$file in loop $count" 3;
                 pot[$count]=$file;
                 ((count++));   
             fi;
-    done;  
+        done;  
    
     commandd=${pot[$commandd]};
     verbose 'int converted too '$commandd 3;
@@ -486,17 +637,59 @@ initSubSection()
 {
     verbose 'initSubSection '$1 3;
     fixCommandHistory $1;
+    verbose 'i seem to be able to call an function thats declared inside another object here' 6;
+    verbose 'if you notice the function has already been declared' 6;
     echoDirList;
     holdForPosSubMenu;
 }
 doAction()
 {
-    if [["$1"='save']]; then
+    if [[ "$1"='save' ]]; then
         dir=$dir'save' 
         cd $dir;
         for entry in "${saveConfig[@]}";  do
-           ( . $entry );
+            . $entry ;
         done;
     fi
 }
+makeSecure()
+{
+    makeSecretFile()
+    {
+        echo ${config[@]} >>  ${config[secretBackUp]};
+        verbose 'why is it secret' 4;        
+    }
+    makeSecretFile;
+    doOpenSecret()
+    {
+        doSecret()
+        {
+            tar czvf - "$1" |
+            openssl des3 -salt -out "$2" -pass pass:"$3";
+        }
+        mvSecret()
+        {
+            cd "$1";
+            git add .;
+            git push secret;
+        }
+        g=${config[openSecret]}
+        l=${config[openSecretLocation]};
+        p=${config[openSecretPswd]};
+        o=${config[openSecret]}
+        r=${config[openSecretRemote]};
+
+        isG=$( isDirGit $g );
+
+        if [[ "$l" && "$o" && "$p" && ! "$isG" = "1" ]]; then
+            verbose 'moving secrets to [[ "$l" && "$o" && "$p" ]]' 3; 
+            doSecret "$l" "$o" "$p";
+            mvSecret "$g";
+            return;
+        fi;
+        
+        verbose 'to open for secrets' 6;
+    }
+}
+
 

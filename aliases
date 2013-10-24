@@ -1,18 +1,18 @@
 addAliases()
 {
+
 projectCommandsPath="$1";
-
-
 
 alias show-config='xs-c';
 
 alias projectCommandsPath=$projectCommandsPath;
 
-
 alias xe-p="export-path";
 
 xsc="xs-c $projectCommandsPath";
+
 xscr="$xsc/show-config.sh";
+
 alias xs-c="$xscr";
 
 alias open-db-backup="cd $dbBackupDir; gitg;";
@@ -51,8 +51,8 @@ alias xg-c="xd-c; cd $gitDir; git-cola";
 
 alias x="php /var/www/tests/folder/exp.php";
 
-
-
 alias xb-u-x="/usr/bin/project-commands/back-up-xml.sh";
 
 }
+
+addAliases;

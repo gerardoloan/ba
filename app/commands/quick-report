@@ -1,4 +1,4 @@
 
-. $projectCommandsPath/commands/documentation/quick-apigen;
-. $projectCommandsPath/commands/documentation/quick-view;
+. $commandPath/documentation/quick-apigen;
+. $commandPath/documentation/quick-view;
 

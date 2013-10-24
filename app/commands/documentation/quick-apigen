@@ -1,3 +1,7 @@
 
 quickViewDir=${config[quickViewDir]};
-apigen -s $quickReportFile -d $quickViewDir --report $pageDocReportFile --todo --deprecated --debug 
+s=${config[quickReport]};
+d=${config[quickViewDir]};
+report=${config[quickReportFile]};
+
+apigen -s $s -d $d --report $report --todo --deprecated --debug 

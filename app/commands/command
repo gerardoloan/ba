@@ -1,18 +1,27 @@
 loop=true;
-. $projectCommandsPath/aliases;
-verbose 'type quit to go back' 0 $verbosity
-while [ "$loop" == "true" ] 
-    do
-        read -p 'command > ' commandd
+
+verbose 'including config based project aliases' 3;
+verbose "${config[projectAliases]}" 3;
+. ${config[projectAliases]} ;
         
-        if [ "$commandd" == "quit" ]; then
-              unset loop;
+verbose 'command || b || back ' 0;
+while [ "$loop" == "true" ] 
+    do       
+        read -p 'commandd > ' commandd
+        
+        if [ "$commandd" = "back" ]; then  
+            verbose 'commandd is back : unsetting loop' 3;
+            unset loop;
+        fi
+        
+        if [ "$commandd" = "b" ]; then
+            verbose 'commandd is b : unsetting loop' 3;
+            unset loop;
         fi
         
         if [ $loop ]; then
-             eval $commandd; 
-             echo '';
-        fi
-       
+            verbose "going to evaluate $commandd" 3;
+            $commandd; 
+        fi     
 
     done

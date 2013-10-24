@@ -1,44 +1,36 @@
 
 . $projectCommandsPath/functions/functions.sh;
-
+. $projectCommandsPath/functions/remote.sh
 
 ########################################################
 
 echoInitConfig;
-configPath='/home/gerard/cl/project-commands/config/config.sh';
+if [[ ! $configPath || ! -r $configPath  ]]; then
+   configPath='/home/gerard/cl/project-commands/config/config.sh';
+fi;
 . $configPath;
-
-
-#############################
-
 
 
 ######################################################################
 # system warning
-warnIfUserIsRoot;
-warnBuild;
-validateConfig;
+doGeneralCheck;
 #####################################################
 #compareDirStatusRecordsEqual
 #equality=$( compareDirStatusRecordsEqual );
-
-###
-########################
-
 
 #################################################
 
 commandPath=$projectCommandsPath/app/commands;
 
-. $projectCommandsPath/aliases;
+
 okFin=1;
 while [[  "$okFin" -gt "0" ]]; do
-  iWant=0; 
+  
    declare -a cH;
-   (launcher);
+  ( launcher );
 
    okFin="$?";
-   verbose 'i want'$iWant;
+   verbose 'test is '$test;
    verbose 'done is '$okFin 3;
 
 done;
