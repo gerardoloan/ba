@@ -1,15 +1,27 @@
 
+recursiveFileCB()
+{   
+    for file in $( find  $1  ); do
+        $2 $file;
+    done;
+
+    return;
+}
 recursiveExFileCB()
 {
     for file in $( find  $1 -executable ); do
         $2 $file;
     done;
 
+    return;
 }
+
 contextValidate()
 {
     verbose "must validate $1 first" 3;
     . $commandPath/../config-validation/$1.sh;
+
+    return;
 }
 isGitDir()
 {
@@ -165,28 +177,8 @@ checkProcesses()
 
 # external
 # validateConfig
-startActionChildren()
-{
-    st child $$;
-    action=true;
-    while [ "$action"="true" ]; do
-        sleep $1;
-        st child;
-    done; 
-}
-doChildMessages()
-{
-    if [ "$1" ]; then
-        echo $$ >> /var/tmp/space-tool/pid/child;
-    fi;
-}
-recursiveExFileCB()
-{
-    for file in $( find  $1 -executable ); do
-        $2 $file;
-    done;
 
-}
+
 
 ################################################################################3
 
@@ -205,7 +197,7 @@ launcher()
            
             #cCManager;
             #echo 'explore and care';
-            # startActionChildren;
+            #startActionChildren;
 
 
             read -p 'space tool > ' commandd num
@@ -384,7 +376,7 @@ showCH()
         verbose "history $showCHCount $i" 3;
         ((showCHCount++))
     fi
-    done
+    done;
    
     return;
 }

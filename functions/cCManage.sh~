@@ -14,10 +14,6 @@ cCManager()
 
         return;        
     }
-    releaseChildrenWithGuardian()
-    {
-        return;
-    }
     tidyPriviousChildren()
     {
         if [ ! "$1" ]; then 
@@ -99,3 +95,79 @@ cCManager()
       
     return;
 }
+startActionChildren()
+{
+    doChildMessages()
+    {
+        if [ "$1" ]; then
+            echo $$ >> /var/tmp/space-tool/pid/child;
+        fi;
+
+        return;
+    }
+
+    if [ ! "$1" ]; then 
+         t=${config[jobFreq]};
+         $( startActionChildren $t ) &
+         
+         return;
+    fi;
+    
+    doChildMessages;
+
+    action=true;
+    while [ "$action"="true" ]; do
+        sleep $1;
+        st child;
+    
+    done;
+
+    return; 
+}
+processChildMessage()
+{
+    
+    if [ "$1" = "start" ]; then
+            verbose "doing childs work from $commandPath/../actions "
+            recursiveFileCB "$commandPath/../actions/*" 'processChildMessage';
+            
+            return 0;
+    fi;
+    verbose "including child job option $1" 3;
+    if [ -f "$1" ]; then
+        verbose "including child job $1" 3;
+        . $1;
+
+        return 0;
+    fi;
+
+    return 1;
+}
+
+
+startActionChildren()
+{
+    if [ ! "$1" ]; then 
+         t=${config[jobFreq]};
+         verbose "starting action children w freq $t" 3;
+         $( startActionChildren $t ) &
+         
+         return;
+    fi;
+    st child $$;
+    action=true;
+    echo initChild >> /home/gerard/rCount;
+    date  >> /home/gerard/rCount;
+    while [ "$action"="true" ]; do
+        sleep $1;
+        echo "message home"  >> /home/gerard/rCount;
+        date  >> /home/gerard/rCount;
+        st child;
+    
+    done;
+
+    return; 
+}
+
+
+

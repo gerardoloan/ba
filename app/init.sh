@@ -8,7 +8,7 @@
     . $projectCommandsPath/functions/launchHelpers.sh;
     . $projectCommandsPath/functions/remote.sh;
 }
-: 
+: # why?
 
 ########################################################
 
@@ -18,10 +18,9 @@ if [[ ! $configPath || ! -r $configPath  ]]; then
    configPath='/home/gerard/cl/space-tool/config/config.sh';
 fi;
 . $configPath;
-
+commandPath=$projectCommandsPath/app/commands;
 #####################################################################
 childMessages;
-
 
 ######################################################################
 # system warning
@@ -30,11 +29,19 @@ doGeneralCheck;
 #compareDirStatusRecordsEqual
 #equality=$( compareDirStatusRecordsEqual );
 
+####################################################
+processChildMessage $1;
+if [ "$?" = "0" ]; then
+    
+    exit 0;
+fi
+
+
 #################################################
 
-commandPath=$projectCommandsPath/app/commands;
-
-cCManager start;
+startForUser()
+{
+    cCManager start;
 echo $$ >> /var/tmp/space-tool/pid/child;
 cCManager; 
 
@@ -49,3 +56,5 @@ while [[  "$okFin" -gt "0" ]]; do
    verbose 'done is '$okFin 3;
 
 done;
+}
+startForUser;

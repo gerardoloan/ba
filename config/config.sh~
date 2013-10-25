@@ -8,7 +8,7 @@ saveConfig[0]='back-up-db';
 saveConfig[1]='move-to-remote';
 
 
-config[saveFreq]=10;
+config[jobFreq]=10;
 config[remoteDbDir]='/data/remote/db';
 config[baseConfigFile]='/usr/bin/project-commands/config/config.sh';
 

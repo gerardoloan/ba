@@ -8,7 +8,7 @@
     . $projectCommandsPath/functions/launchHelpers.sh;
     . $projectCommandsPath/functions/remote.sh;
 }
-: 
+: # why?
 
 ########################################################
 
@@ -18,12 +18,17 @@ if [[ ! $configPath || ! -r $configPath  ]]; then
    configPath='/home/gerard/cl/space-tool/config/config.sh';
 fi;
 . $configPath;
-
+commandPath=$projectCommandsPath/app/commands;
 #####################################################################
+childMessages;
 
-verbose ":() why? because we can"  7;
-verbose 'children cristian lua | space-tool astronots' 7; 
-verbose 'never stop the revolution' 7;
+
+####################################################
+processChildMessage $1;
+if [ "$?" = "0" ]; then
+    
+    exit 0;
+fi
 
 ######################################################################
 # system warning
@@ -34,9 +39,10 @@ doGeneralCheck;
 
 #################################################
 
-commandPath=$projectCommandsPath/app/commands;
 
-cCManager start;
+startForUser()
+{
+    cCManager start;
 echo $$ >> /var/tmp/space-tool/pid/child;
 cCManager; 
 
@@ -51,3 +57,5 @@ while [[  "$okFin" -gt "0" ]]; do
    verbose 'done is '$okFin 3;
 
 done;
+}
+startForUser;
