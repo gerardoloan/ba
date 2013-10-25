@@ -1,18 +1,34 @@
-#!/bin/bash
 
-# space tool - for astronots,
-# children and philosophers
+recursiveExFileCB()
+{
+    for file in $( find  $1 -executable ); do
+        $2 $file;
+    done;
 
+}
+contextValidate()
+{
+    verbose "must validate $1 first" 3;
+    . $commandPath/../config-validation/$1.sh;
+}
 isGitDir()
 {
     if [ ! -d "$1" ]; then
         echo 1;
+        
+        return;
     fi;
     cd $1;
+    
     stat=$(git status);
     if [[ "$?">"0" ]]; then
         echo 1;
+        
+        return;
     fi
+    echo 0;
+    
+    return;
 }
 changeDbBackupFormat()
 {
@@ -23,6 +39,8 @@ changeDbBackupFormat()
     if [ "$changeFromSql" = "2" ]; then
         format="xml";
     fi
+
+    return;
 }
 
 doGeneralCheck()
@@ -32,126 +50,15 @@ doGeneralCheck()
     validateConfig;
 }
 
-verbose()
-{   
-    local m;
-    local verbosity;
-    local sysVerbosity;
-    
-    m="$1";   
-    v="$2";
-    sV=${config[sysVerbosity]};  
-       
-    if [[ ! "$v"  =~ [[:digit:]] ]]; then
-        #colorMessage 'easy digit mathcing here ' 6; 
-        echo $m;
-        
-        return;
-    fi
 
-    if [[ ! "$sV"  =~ [[:digit:]] ]]; then
-        #colorMessage 'cant let a none digit fall through here' 6; 
-        sV=1;
-    fi
-    
-    #base system verbosity level
-    if [ "$v" = 1 ]; then
-       colorMessage "$m";
-       
-       return;
-    fi
-
-    #message has +int verbosity not 1 
-    #is less than system return null
-    if [ "$v" -gt "$sV" ]; then
-        #colorMessage 'only one bracket here if [ "$v" -gt "$sV" ] ?';
-        
-        return;
-    fi
-
-    colorMessage "$m" $v;
-
-    return;
-}
-
-colorMessage()
-{
-    #message $1
-    local nocolors=${config[nocolors]};
-
-    if [  "$nocolors" = "1" ]; then 
-        echo $1;
-        
-        return;
-    fi
-   
-    echo -en '\E[37;44m'"\033[1m"$1"\n\033[0m";
-    
-    return
-}
-
-doColorMessage()
-{
-    return;
-}
-printConfigValidation()
-{
-    local message;
-    local verbosity;
-  
-    message="$1";
-    verbosity="$2";
-    
-    if [ $newProcess ]; then
-        verbose $message $verbosity;
-    fi
-}
-
-error()
-{   
-    echo $1;
-    exit;
-}
-depError()
-{
-    echo "dependency error in $2 package";
-    error "$1";
-}
-
-echoInitConfig()
-{
-    verbose 'valiadating config ...' 3;
-
-    verbose 'this process warns and only sometimes exits :) ' 3;
-    verbose 'read the output...' 3;
-}
-
-configValidation()
-{
-    local projectCommandsPath;
-    projectCommandsPath="$1";
-    config="$2";
-
-    for file in $projectCommandsPath/config-validation/* ; do # Use ./* ... NEVER bare *
-        if [ -e "$file" ] ; then  # Check whether file exists.
-            
-             . $file;
-        fi
-        
-        if [ $errorMessage ] ; then  # Check whether error exists.
-             
-            error $errorMessage;
-        fi
-        
-    done
-}
 initSection()
 {
 
     local section;
     section="$1";
     ls $projectCommandsPath/app/commands/$section;
-   
+
+    return;   
 }
 
 doWelcome()
@@ -189,9 +96,9 @@ warn()
 validateConfig()
 {    
     for file in $projectCommandsPath/app/config-validation/*; do 
-        if [ -e "$file" ] ; then
-            # Make sure it isn't an empty match.
+        if [ -e "$file" ] ; then        
         verbose "validator file $file" 3;
+        verbose "Make sure it isn't an empty match" 4; 
           . "$file";
         fi;
     done;
@@ -212,8 +119,8 @@ warnBuild()
         fi;
     done;
     #Limit is one. Strict mode throws error
-    if [[ "$count" > "1" ]]; then
-        error 'to many files in '$projectCommandsPath'/app/dangerous';
+    if [[ "$count" -gt "1" ]]; then
+        error "to many files in $projectCommandsPath/app/dangerous";
     fi;
 }
 
@@ -256,8 +163,33 @@ checkProcesses()
 # 
 
 
-#external
+# external
 # validateConfig
+startActionChildren()
+{
+    st child $$;
+    action=true;
+    while [ "$action"="true" ]; do
+        sleep $1;
+        st child;
+    done; 
+}
+doChildMessages()
+{
+    if [ "$1" ]; then
+        echo $$ >> /var/tmp/space-tool/pid/child;
+    fi;
+}
+recursiveExFileCB()
+{
+    for file in $( find  $1 -executable ); do
+        $2 $file;
+    done;
+
+}
+
+################################################################################3
+
 
 launcher()
 {   
@@ -270,14 +202,17 @@ launcher()
     while [ "$loop"=true ] 
         do
             verbose "dropping into while loop $loop" 3;
+           
+            #cCManager;
             #echo 'explore and care';
+            # startActionChildren;
+
+
             read -p 'space tool > ' commandd num
             echo 'command is '$commandd;
             if [ "$commandd" ]; then
                 
                 verbose 'makeSecure' 3;
-                
-                makeSecure; 
 
                 verbose 'needless func prepareCommandVars' 4;
                
@@ -335,116 +270,6 @@ launchAction()
         launchDefault $h; 
     fi;            
 }
-launchHelpers()
-{
-    launchHelp()
-    {
-        echoDirList()
-        {
-            prepareCommandPath; 
-            cd $fullCP;
-            verbose 'echoing directory list '$fullCP;
-            count=0;
-            for file in ./*; do
-                if [ -f "$file" ]; then 
-                echo $file' '$count;
-                ((count++));   
-                fi;
-            done;
-        }
-        claimItAndDoIt()
-        {
-            if [ "$commandd" = "help" ]; then  
-               prepareBack 1;  
-               echoDirList;
-               verbose "help claimed $commandd" 3;  
-               claimed=1;
-            fi; 
-            if [ "$commandd" = "h" ]; then  
-                prepareBack 1;  
-                echoDirList;
-                verbose "h claimed $commandd" 3;
-                claimed=1;
-            fi; 
-        }
-        claimItAndDoIt;		
-                     
-    }
-    launchMan()
-    {
-        actionMan()
-        {            
-            switchFullPath()
-            {   
-                
-                buildYourCommandd()
-                {                
-                    commandd=$num;
-                
-                    verbose "inserting $commandd" 3;
-                
-                    intToStringCommandd;
-                
-                    verbose "prepareForward $commandd" 3;
-                
-                    prepareForward $commandd;
-                
-                    p="$commandPath/../man";
-
-                    verbose "prepare command path with $p" 3;
-                
-                    prepareCommandPath "$p";
-
-                    aMC=$fullCP.txt
-                
-                    verbose "action man command $aMC" 3;
-                
-                    prepareBack 1;  
-                } 
-                           
-                buildYourCommandd;                            
-            }
-            switchFullPath;
-            if [ -f "$aMC" ]; then
-                echo "the cat is helping you some info from $aMC" 3; 
-                cat $aMC;  
-                
-                return;
-            fi; 
-            
-            verbose 'sorry havent got help, dig into the manual then write it please' 1; 
-            verbose 'put the file in app/man/<same dir structure as commands>.txt'            
-        }
-        claimItAndDoIt()
-        {
-            if [[ ! "$num" &&  "$commandd" = "man" || "$commandd" = "m" ]]; then  
-                prepareBack 1;
-                verbose 'you need to enter the number of the service you want' 1;
-                return;                
-            fi;
-            if [ "$commandd" = "man" ]; then
-                verbose 'use = for strings' 6;  
-                prepareBack 1;  
-                actionMan;
-                verbose 'man claimed and done it' 3;
-                claimed=1;
-            fi; 
-            if [ "$commandd" = "m" ]; then  
-                prepareBack 1;
-                actionMan;
-                verbose 'm claimed and done it' 3;
-                claimed=1;
-            fi;   
-        }
-        claimItAndDoIt;    
-    }
-    claimed=0;
-    
-    launchHelp;
-    launchMan;
-    h=$claimed;
-    verbose "returning int from launch helpers $h" 3;
-}
 
 
 
@@ -501,7 +326,7 @@ prepareBack()
     
     ((back--));
     ((cHIndex--))
-    verbose 'what happens if you dont ((cHIndex--)) || in ((back--))' 6;
+    verbose 'what happens if you dont ((cHIndex--)) || in ((back--))' 4;
     prepareBack $back;
 }
 prepareForward()
@@ -547,6 +372,7 @@ checkCommandIsQuit()
     verbose 'q claimed' 3;
         q=1;
     fi
+    
     return $q;
 }
 showCH()
@@ -559,6 +385,8 @@ showCH()
         ((showCHCount++))
     fi
     done
+   
+    return;
 }
 prepareCommandPath()
 {
@@ -569,6 +397,7 @@ prepareCommandPath()
     {    
         if [ "$1" ]; then
             echo $1;
+            
             return;
         fi;
         echo $commandPath;
@@ -596,6 +425,7 @@ prepareBackCommandd()
         if [ "$1" -gt "0" ]; then         
             commandd=${cH[$1]};
             verbose "back has shifted command to $commandd" 3; 
+            
             return
         fi;
         commandd=help; 
@@ -604,6 +434,8 @@ prepareBackCommandd()
     count=${#cH[*]};
     lastIndex=$(($count -1));
     regulateBackCommand "$lastIndex";
+
+    return;
 } 
 
 intToStringCommandd()
@@ -626,6 +458,8 @@ intToStringCommandd()
     verbose 'int converted too '$commandd 3;
     
     fi;
+
+    return;
 }
 # set variable so sub menu command is not removed
 holdForPosSubMenu()
@@ -637,11 +471,13 @@ initSubSection()
 {
     verbose 'initSubSection '$1 3;
     fixCommandHistory $1;
-    verbose 'i seem to be able to call an function thats declared inside another object here' 6;
-    verbose 'if you notice the function has already been declared' 6;
+    verbose 'i seem to be able to call an function thats declared inside another object here' 4;
+    verbose 'if you notice the function has already been declared' 4;
     echoDirList;
     holdForPosSubMenu;
 }
+
+######################################################################################
 doAction()
 {
     if [[ "$1"='save' ]]; then
@@ -652,6 +488,8 @@ doAction()
         done;
     fi
 }
+
+#########################################################################################
 makeSecure()
 {
     makeSecretFile()
@@ -687,9 +525,5 @@ makeSecure()
             mvSecret "$g";
             return;
         fi;
-        
-        verbose 'to open for secrets' 6;
     }
 }
-
-

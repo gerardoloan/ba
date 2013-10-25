@@ -1,0 +1,3 @@
+echo $$;
+bash fast-test &
+

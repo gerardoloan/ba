@@ -8,7 +8,7 @@ saveConfig[0]='back-up-db';
 saveConfig[1]='move-to-remote';
 
 
-config[saveFreq]=10;
+config[jobFreq]=10;
 config[remoteDbDir]='/data/remote/db';
 config[baseConfigFile]='/usr/bin/project-commands/config/config.sh';
 
@@ -34,7 +34,7 @@ config[dbBackupDir]='/home/gerard/db';
 config[remoteDbBackupDir]='data/remote/db';
 config[secretBackUp]='/home/gerard/secret';
 config[baseProjectPath]='/home/gerard/sites/modules.w.doctrine/modules.zendframework.com';
-config[sysVerbosity]='1';
+config[sysVerbosity]='7';
 
 
 ###################################################################

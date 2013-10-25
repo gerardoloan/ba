@@ -1,14 +1,26 @@
 
-. $projectCommandsPath/functions/functions.sh;
-. $projectCommandsPath/functions/remote.sh
+
+:()
+{
+    . $projectCommandsPath/functions/functions.sh;
+    . $projectCommandsPath/functions/message.sh;
+    . $projectCommandsPath/functions/cCManage.sh
+    . $projectCommandsPath/functions/launchHelpers.sh;
+    . $projectCommandsPath/functions/remote.sh;
+}
+: 
 
 ########################################################
 
 echoInitConfig;
+
 if [[ ! $configPath || ! -r $configPath  ]]; then
-   configPath='/home/gerard/cl/project-commands/config/config.sh';
+   configPath='/home/gerard/cl/space-tool/config/config.sh';
 fi;
 . $configPath;
+
+#####################################################################
+childMessages;
 
 
 ######################################################################
@@ -22,17 +34,18 @@ doGeneralCheck;
 
 commandPath=$projectCommandsPath/app/commands;
 
+cCManager start;
+echo $$ >> /var/tmp/space-tool/pid/child;
+cCManager; 
 
 okFin=1;
 while [[  "$okFin" -gt "0" ]]; do
-  
+
    declare -a cH;
-  ( launcher );
+   ( launcher );
 
    okFin="$?";
-   verbose 'test is '$test;
+   
    verbose 'done is '$okFin 3;
 
 done;
-
-

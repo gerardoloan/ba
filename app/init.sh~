@@ -1,46 +1,53 @@
 
-. $projectCommandsPath/functions/functions.sh;
 
+:()
+{
+    . $projectCommandsPath/functions/functions.sh;
+    . $projectCommandsPath/functions/message.sh;
+    . $projectCommandsPath/functions/cCManage.sh
+    . $projectCommandsPath/functions/launchHelpers.sh;
+    . $projectCommandsPath/functions/remote.sh;
+}
+: 
 
 ########################################################
 
 echoInitConfig;
-configPath='/home/gerard/cl/project-commands/config/config.sh';
+
+if [[ ! $configPath || ! -r $configPath  ]]; then
+   configPath='/home/gerard/cl/space-tool/config/config.sh';
+fi;
 . $configPath;
 
+#####################################################################
 
-#############################
-
-
+verbose ":() why? because we can"  7;
+verbose 'children cristian lua | space-tool astronots' 7; 
+verbose 'never stop the revolution' 7;
 
 ######################################################################
 # system warning
-warnIfUserIsRoot;
-warnBuild;
-validateConfig;
+doGeneralCheck;
 #####################################################
 #compareDirStatusRecordsEqual
 #equality=$( compareDirStatusRecordsEqual );
-
-###
-########################
-
 
 #################################################
 
 commandPath=$projectCommandsPath/app/commands;
 
-. $projectCommandsPath/aliases;
+cCManager start;
+echo $$ >> /var/tmp/space-tool/pid/child;
+cCManager; 
+
 okFin=1;
 while [[  "$okFin" -gt "0" ]]; do
-  iWant=0; 
+
    declare -a cH;
-   (launcher);
+   ( launcher );
 
    okFin="$?";
-   verbose 'i want'$iWant;
+   
    verbose 'done is '$okFin 3;
 
 done;
-
-

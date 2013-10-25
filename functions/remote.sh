@@ -8,11 +8,13 @@ compareDirStatusRecordsEqual()
    
     verbose 'old '$priCS 3;
     verbose 'nw '$nCS 3;
+
     if [ "$priCS" = "$nCS" ]; then
         verbose 'workMore' 1;
         
         return;
     fi;
+
     #@todo make this a feature
     priCS=$nCS;
     export priCS=$priCS    
@@ -22,8 +24,7 @@ compareDirStatusRecordsEqual()
 }
 
 actionHandlers()
-{
-    
+{    
     for file in $projectCommandsPath/app/actions/$1/*; do 
         if [ -e "$file" ] ; then
             # Make sure it isn't an empty match.
@@ -31,4 +32,10 @@ actionHandlers()
         fi
     done
 }
+#1 command
+#2 validation
+#3 explanation
+#4 advanced
+#5 children
+#6 philo
 
