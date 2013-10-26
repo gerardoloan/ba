@@ -1,4 +1,15 @@
-
+recLim()
+{
+    echo attemptRec;
+    if [ ! "$recCount" -gt "$1" ]; then
+        echo recurred;
+        recCount=$(( recCount++ ));
+        export recCount;
+    else
+        echo recedTolimit
+        
+    fi;
+}
 recursiveFileCB()
 {   
     for file in $( find  $1  ); do
@@ -195,9 +206,8 @@ launcher()
         do
             verbose "dropping into while loop $loop" 3;
            
-            #cCManager;
             #echo 'explore and care';
-            #startActionChildren;
+            # startActionChildren;
 
 
             read -p 'space tool > ' commandd num

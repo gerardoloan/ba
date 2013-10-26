@@ -20,15 +20,7 @@ fi;
 . $configPath;
 commandPath=$projectCommandsPath/app/commands;
 #####################################################################
-childMessages;
-
-
-####################################################
-processChildMessage $1;
-if [ "$?" = "0" ]; then
-    
-    exit 0;
-fi
+#childMessages;
 
 ######################################################################
 # system warning
@@ -37,14 +29,22 @@ doGeneralCheck;
 #compareDirStatusRecordsEqual
 #equality=$( compareDirStatusRecordsEqual );
 
-#################################################
+####################################################
 
+if [ "$1" = "start" ]; then
+    
+    processChildMessage;
+    verbose "just childish stuff" 3;
+    exit 1;
+fi;
+
+#################################################
 
 startForUser()
 {
-    cCManager start;
-echo $$ >> /var/tmp/space-tool/pid/child;
-cCManager; 
+# $1 timeout
+    # $2 dir
+actionChildrenCB "10" "$projectCommandsPath" &
 
 okFin=1;
 while [[  "$okFin" -gt "0" ]]; do
