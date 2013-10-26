@@ -10,6 +10,14 @@ recLim()
         
     fi;
 }
+removeAnnoyingSymbols()
+{ 
+   h;exit;
+   ${$1%~}
+   badname=echo "filename.sh" | sed -n /[\?~$]/p
+  # + { ; " \ = ? ~ ( ) < > & * | $
+}
+ 
 recursiveFileCB()
 {   
     for file in $( find  $1  ); do

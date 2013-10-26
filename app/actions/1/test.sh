@@ -1,0 +1,1 @@
+. $commandPath/testsuite/fast-test;

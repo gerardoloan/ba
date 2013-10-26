@@ -12,9 +12,9 @@ actionChildrenCB()
 
 goActionChildren()
 {
-    r=${config[holdChildren]};
-    if [ ! $r ]; then
-        verbose "not running children" 1;
+    c=${config[c]};
+    if [  $c ]; then
+        verbose "running children" 1;
         actionChildrenCB $1; 
 
         return;
@@ -28,7 +28,7 @@ goActionChildren()
 processChildMessage()
 { 
     if [ ! $1 ]; then        
-        verbose "doing childs work from $commandPath/../actions "
+        verbose "doing childs work from $commandPath/../actions" 4;
         recursiveFileCB "$commandPath/../actions" "processChildMessage";
         
        return 0;

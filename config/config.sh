@@ -34,7 +34,7 @@ config[dbBackupDir]='/home/gerard/db';
 config[remoteDbBackupDir]='data/remote/db';
 config[secretBackUp]='/home/gerard/secret';
 config[baseProjectPath]='/home/gerard/sites/modules.w.doctrine/modules.zendframework.com';
-config[sysVerbosity]='7';
+config[sysVerbosity]='1';
 
 
 ###################################################################
