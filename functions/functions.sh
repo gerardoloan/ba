@@ -205,11 +205,8 @@ launcher()
     while [ "$loop"=true ] 
         do
             verbose "dropping into while loop $loop" 3;
+            goActionChildren "5" &
            
-            #echo 'explore and care';
-            # startActionChildren;
-
-
             read -p 'space tool > ' commandd num
             echo 'command is '$commandd;
             if [ "$commandd" ]; then

@@ -1,4 +1,4 @@
-
+# there's only two hard things...
 
 :()
 {
@@ -20,31 +20,18 @@ fi;
 . $configPath;
 commandPath=$projectCommandsPath/app/commands;
 #####################################################################
-#childMessages;
+childMessages;
 
 ######################################################################
 # system warning
 doGeneralCheck;
 #####################################################
-#compareDirStatusRecordsEqual
-#equality=$( compareDirStatusRecordsEqual );
-
-####################################################
-
-if [ "$1" = "start" ]; then
-    
-    processChildMessage;
-    verbose "just childish stuff" 3;
-    exit 1;
-fi;
-
-#################################################
 
 startForUser()
 {
 # $1 timeout
     # $2 dir
-actionChildrenCB "10" "$projectCommandsPath" &
+
 
 okFin=1;
 while [[  "$okFin" -gt "0" ]]; do
@@ -58,4 +45,17 @@ while [[  "$okFin" -gt "0" ]]; do
 
 done;
 }
-startForUser;
+
+
+if [ "$1" = "start" ]; then
+    
+    processChildMessage;
+    verbose "just childish stuff" 3;
+    exit 1;
+else
+   startForUser;
+fi;
+exit 0;
+#################################################
+
+

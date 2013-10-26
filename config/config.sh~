@@ -25,7 +25,7 @@ config[apigenDir]='/home/gerard/sites/modules.w.doctrine/modules.zendframework.c
 config[testDir]='/home/gerard/sites/modules.w.doctrine/modules.zendframework.com/module/ZfModule/test';
 config[projectAliases]='/home/gerard/cl/project-commands/config/config.sh';
 #current tracking directory
-config[trackDir]='/home/gerard/cl/project-commands';
+config[trackDir]='/home/gerard/cl/space-tool';
 config[db]='moduleswdoctrine';
 config[dbUser]='root';
 config[dbPassword]='fuckit2004';
