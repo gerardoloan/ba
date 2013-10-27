@@ -36,7 +36,8 @@ processChildMessage()
     verbose "including child job option $1" 3;
     if [ -f "$1" ]; then
         verbose "including child job $1" 3;
-
+        sleep ${config[actionRest]};
+        echo  ${config[actionRest]};
         ( . $1 );
         
         return 0;

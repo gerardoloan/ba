@@ -4,13 +4,10 @@ compareDir()
     {
         if [ "$priCS" = "$nCSC" ]; then
             verbose 'workMore' 1;
-            rm /var/tmp/space-tool/comDirFalse;
-            touch /var/tmp/space-tool/comDirTrue;   
-            
+           
             return 1;
         fi;
-        rm /var/tmp/space-tool/comDirTrue;
-        touch /var/tmp/space-tool/comDirFalse;
+
         verbose "never stop the revolution" 1;
 
         return 0;
@@ -57,8 +54,8 @@ compareDir()
    
     return;      
 }
-	
-
+echo dc;	
+projectDirChanged="true";
 compareDir;
 
 

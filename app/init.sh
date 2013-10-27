@@ -1,7 +1,7 @@
 # there's only two hard things...
-
 :()
 {
+    . $projectCommandsPath/functions/launcher.sh
     . $projectCommandsPath/functions/functions.sh;
     . $projectCommandsPath/functions/message.sh;
     . $projectCommandsPath/functions/cCManage.sh

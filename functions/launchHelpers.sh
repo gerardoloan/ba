@@ -4,9 +4,10 @@ launchHelpers()
     {
         echoDirList()
         {
-            prepareCommandPath; 
-            cd $fullCP;
+            prepareCommandPath;
             verbose 'echoing directory list '$fullCP;
+            cd $fullCP;
+            
             count=0;
             
             for file in ./*; do
@@ -53,7 +54,7 @@ launchHelpers()
                     intToStringCommandd;
                 
                     verbose "prepareForward $commandd" 3;
-                
+                    
                     prepareForward $commandd;
                 
                     p="$commandPath/../man";
