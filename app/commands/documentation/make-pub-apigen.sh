@@ -2,15 +2,15 @@ apigenDir=${config[apigenDir]};
 
 apigenCf='pub_doc.neon';
 
-read -p 'change apigen dir? 0 || 1 ' cad
+read -p 'change apigen dir? y || n ' cad
 
-if [ "$cad" = "1" ]; then
+if [ "$cad" = "y" ]; then
     read -p '$apigenDir' apigenDir;
 fi
 
-read -p 'change apigen config file? 0 || 1 ' cacf
+read -p 'change apigen config file? y || n ' cacf
 
-if [ "$cacf" = "1" ]; then
+if [ "$cacf" = "y" ]; then
     read -p '$apigenCf' apigenCf;
 fi
 

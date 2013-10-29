@@ -1,1 +1,1 @@
-initSubSection 'gitcommands';
+initSubSection 'git';

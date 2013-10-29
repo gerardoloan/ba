@@ -46,7 +46,7 @@ launcher()
                 intToStringCommandd;           
 
                 verbose 'current index '$cHIndex 3;
-                verbose "prepareForward $commandd";
+                verbose "prepareForward $commandd" 3;
 
                 prepareForward $commandd;
 
@@ -284,7 +284,7 @@ intToStringCommandd()
         verbose 'int to string starting loop' 3;
         for file in ./*; do
             if [ -f "$file" ]; then 
-                echo "$file in loop $count" 3;
+                verbose "$file in loop $count" 3;
                 pot[$count]=$file;
                 ((count++));   
             fi;

@@ -1,1 +1,1 @@
-initSubSection 'remoteCommands';
+initSubSection 'remote';

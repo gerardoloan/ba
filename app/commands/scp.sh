@@ -3,9 +3,6 @@ u="";
 h="";
 r=""; #to read
 
-#readPKFile;
-echo "user $u";
-
 readUser()
 {
     uL=$( verbose "user " );
@@ -37,9 +34,11 @@ readHost()
 }
 readHost;
 
+verbose "Directories are from the base directory" 1;
+verbose "No ~/ " 1;
 readRDir()
 {
-    rDL=$( verbose "dir GET copy " );
+    rDL=$( verbose "copy from" );
     read -p "$rDL " r;
     if [ ! "$r" ]; then
         verbose "required** remote host " 1;
@@ -52,6 +51,27 @@ readRDir()
 }
 readRDir;
 
+rLL=$( verbose "Copy to (if not supplied from path will be used)" );
+read -p "$rLL " l;
+if [ ! "$l" ]; then 
+    l="$r";
+    verbose "will copy to $l" 1;
+fi;
+readUPK()
+{
+    uPKL=$( verbose "ssh keys from standard place? 0 || 1" );    
+    read -p "$uPKL " uPK;
+    echo $uPK;
+    if [[  "$uPK" = "0" ||  "$uPK" = "1" ]]; then
+        return;
+    fi; 
+    
+    verbose "must answer 0 || 1" 1;
+    readUPK; 
+    
+    return;
+}
+readUPK;
 
 doCp()
 {   
@@ -59,26 +79,40 @@ doCp()
     u="$1";
     h="$2";
     d="$3"; 
-    verbose "doing scp $u $h  $d" ;
-    echo "user $u";
-    echo "pk $pK"
-    scp -r $u'@'$h:$d .
-    return;
-    if [ ! -f "$1" ]; then
-        echo 1;
-        echo "scp -r $u@$h:$d ." 3;
-        scp  "-r $u@$h:$d .";
+    l="$4";
+    verbose "doing scp $u $h  $d $l" ;
+    
+    echo "scp -r $u@$h:$d $l" ;
+    scp  -r $u@$h:~/$d ~/$l;
           
-        return;
-    fi;
-    echo 2;
-    verbose "scp -i  $u@$h:$d ." ;
-    scp "-i $u@$h:$d ." ;
+    return;    
+}
+
+pKCp()
+{
+    u="$1";
+    h="$2";
+    d="$3"; 
+    l="$4";
+    verbose "scp -r -i ~/.ssh/id_rsa.pub $u@$h:~/$d $l" ;
+    scp -r -i ~/.ssh/id_rsa.pub $u@$h:~/$d $l;
 
     return;
 }
-echo "user $u";
-  
-echo " $u $h $r";
-doCp  $u $h $r;
+pickCpType()
+{
+    u="$1";
+    h="$2";
+    d="$3"; 
+    l="$4";
+    uPK="$5";
+    echo " $u $h $r $l";
+    if [ "$uPK" = "1" ]; then 
+        pKCp $u $h $r $l;
+    fi;
+    if [ "$uPK" = "0" ]; then 
+        doCp $u $h $r $l;
+    fi;
+}
+pickCpType $u $h $r $l $uPK;
 

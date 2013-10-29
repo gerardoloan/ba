@@ -1,1 +1,1 @@
-. $commandPath/testsuite/fast-test;
+. $commandPath/test/fast-test.sh;

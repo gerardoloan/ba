@@ -5,7 +5,7 @@ launchHelpers()
         echoDirList()
         {
             prepareCommandPath;
-            verbose 'echoing directory list '$fullCP;
+            verbose "echoing directory list $fullCP" 3;
             cd $fullCP;
             
             count=0;

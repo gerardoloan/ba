@@ -4,13 +4,21 @@ compareDir()
     {
         if [ "$priCS" = "$nCSC" ]; then
             verbose 'workMore' 1;
-            rm /var/tmp/space-tool/comDirFalse;
-            touch /var/tmp/space-tool/comDirTrue;   
+            
+            if [[ ! -f /var/tmp/space-tool/comDirFalse ]]; then
+                touch /var/tmp/space-tool/comDirFalse;
+            fi;
+
+            mv  /var/tmp/space-tool/comDirFalse /var/tmp/space-tool/comDirTrue;
             
             return 1;
         fi;
-        rm /var/tmp/space-tool/comDirTrue;
-        touch /var/tmp/space-tool/comDirFalse;
+
+        if [[ ! -f /var/tmp/space-tool/comDirTrue ]]; then
+                touch /var/tmp/space-tool/comDirTrue;
+        fi;
+
+        mv  /var/tmp/space-tool/comDirTrue /var/tmp/space-tool/comDirFalse	;
         verbose "never stop the revolution" 1;
 
         return 0;
@@ -44,8 +52,8 @@ compareDir()
     }
     p=${config[trackDir]};
     cd $p;
-    echo enteringPorcessor;
-    verbose "starting comparison of $p":
+    
+    verbose "starting comparison of $p" 3;
    
     prepareCheckSum;
     getNewCk;

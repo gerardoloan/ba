@@ -1,1 +1,1 @@
-initSubSection 'testsuite';
+initSubSection 'test';

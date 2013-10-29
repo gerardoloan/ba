@@ -27,17 +27,33 @@ goActionChildren()
 
 processChildMessage()
 { 
-    if [ ! $1 ]; then        
-        verbose "doing childs work from $commandPath/../actions" 4;
-        recursiveFileCB "$commandPath/../actions" "processChildMessage";
+    doActionRest()
+    {
+        if [[ "${config[actionRest]}" =~ [[:digit:]] ]]; then
+            verbose "resting for ${config[actionRest]}" 1;
+            sleep ${config[actionRest]};
+ 
+            return;
+        fi;
+
+        return;
+    }
+    start()
+    {
+        if [ ! $1 ]; then        
+            verbose "doing childs work from $commandPath/../actions" 4;
+            recursiveFileCB "$commandPath/../actions" "processChildMessage";
         
-       return 0;
-    fi;
+            return 0;
+        fi;
+    }
+
     verbose "including child job option $1" 3;
     if [ -f "$1" ]; then
-        verbose "including child job $1" 3;
-        sleep ${config[actionRest]};
-        echo  ${config[actionRest]};
+        verbose "including child job $1" 3;        
+        
+        doActionRest;
+        
         ( . $1 );
         
         return 0;

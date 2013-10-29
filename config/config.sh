@@ -3,11 +3,6 @@ declare -A config;
 declare -A saveConfig;
 declare -a saveConfigHandlers;
 #-A option declares associative array.
-
-saveConfig[0]='back-up-db';
-saveConfig[1]='move-to-remote';
-
-
 config[jobFreq]=10;
 config[remoteDbDir]='/data/remote/db';
 config[baseConfigFile]='/usr/bin/project-commands/config/config.sh';
@@ -23,7 +18,7 @@ config[gitDir]='/home/gerard/sites/modules.w.doctrine/modules.zendframework.com'
 config[apigenDir]='/home/gerard/sites/modules.w.doctrine/modules.zendframework.com/module/ZfModule';
 #a test dir to look 
 config[testDir]='/home/gerard/sites/modules.w.doctrine/modules.zendframework.com/module/ZfModule/test';
-config[projectAliases]='/home/gerard/cl/project-commands/config/config.sh';
+config[projectAliases]='/home/gerard/cl/space-tool/config/aliases.sh';
 #current tracking directory
 config[trackDir]='/home/gerard/cl/space-tool';
 config[db]='moduleswdoctrine';
@@ -37,6 +32,7 @@ config[baseProjectPath]='/home/gerard/sites/modules.w.doctrine/modules.zendframe
 config[sysVerbosity]='1';
 config[actionRest]="0";
 
+config[remoteUser]='two';
+config[remoteHost]='localhost';
+
 ###################################################################
-
-

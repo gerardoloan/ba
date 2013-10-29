@@ -1,0 +1,4 @@
+
+
+
+nano ${config[baseConfigFile]};

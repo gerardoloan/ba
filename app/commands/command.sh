@@ -21,7 +21,7 @@ while [ "$loop" == "true" ]
         
         if [ $loop ]; then
             verbose "going to evaluate $commandd" 3;
-            $commandd; 
+            "$commandd"; 
         fi     
 
     done

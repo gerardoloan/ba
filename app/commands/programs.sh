@@ -1,2 +1,2 @@
 
-initSubSection 'program-commands';
+initSubSection 'programs';

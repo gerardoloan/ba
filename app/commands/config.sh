@@ -1,2 +1,2 @@
 
-initSubSection 'configcommands';
+initSubSection 'config';
